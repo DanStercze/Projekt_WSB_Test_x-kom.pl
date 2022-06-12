@@ -1,0 +1,53 @@
+##Test logowania 1
+##Prawidłowe logowanie
+
+#Dane konta
+#Maurycy
+#Żymełka
+#pgarrett@yahoo.com
+#X%Y7OGBsG#
+
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from faker import Faker
+import random
+import time
+fake = Faker(['en_US', 'pl_PL'])
+#Ustawienia webdrivera
+s=Service("C:\Program Files (x86)\chromedriver.exe")
+driver=webdriver.Chrome(service=s)
+
+#Dane
+email = "pgarrett@yahoo.com"
+password = "X%Y7OGBsG#"
+
+#Włączenie strony logowania do sklepu x-kom
+driver.get("https://www.x-kom.pl/logowanie")
+time.sleep(2)
+
+#Wprowadzam dane
+#login
+search = driver.find_element(By.NAME, "login")
+search.send_keys(email)
+
+#Niepoprawne hasło
+search = driver.find_element(By.NAME, "password")
+search.send_keys(password)
+time. sleep(3)
+
+#Potwierdzenie rejestracji
+search = driver.find_element(By.NAME, "login")
+search.send_keys(Keys.RETURN)
+time. sleep(2)
+
+#Sprawdzenie programu
+Potwierdzenie = driver.find_element(By.XPATH, "//*[text()='Nie masz żadnych zamówień']")
+time. sleep(2)
+
+#Potwierdzenie wystąpienia błędu
+assert Potwierdzenie.text == "Nie masz żadnych zamówień"
+time. sleep(5)
+#Zamknięcie strony
+driver.close()
