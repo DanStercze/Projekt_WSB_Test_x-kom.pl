@@ -22,7 +22,7 @@ F_password = fake.password(length=10)
 #Włączenie strony rejestracji do sklepu x-kom
 driver.get("https://www.x-kom.pl/rejestracja")
 time.sleep(2)
-
+ 
 #Wprowadzam dane
 #Imię
 search = driver.find_element(By.NAME, "firstName")
