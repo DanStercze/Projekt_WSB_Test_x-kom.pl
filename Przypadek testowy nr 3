@@ -1,0 +1,59 @@
+##Test rejestracji 3
+##Błędny email
+
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from faker import Faker
+import random
+import time
+fake = Faker(['en_US', 'pl_PL'])
+#Ustawienia webdrivera
+s=Service("C:\Program Files (x86)\chromedriver.exe")
+driver=webdriver.Chrome(service=s)
+
+#Fałszywe dane
+F_imie = fake.first_name()
+F_nazw = fake.last_name()
+F_email = fake.free_email()
+F_password = fake.password(length=10)
+
+#Fałszywe błędne dane
+F_email_x = "xxx"
+
+#Włączenie strony rejestracji do sklepu x-kom
+driver.get("https://www.x-kom.pl/rejestracja")
+time.sleep(2)
+
+#Wprowadzam dane
+#Imię
+search = driver.find_element(By.NAME, "firstName")
+search.send_keys(F_imie)
+#Nazwisko
+search = driver.find_element(By.NAME, "lastName")
+search.send_keys(F_nazw)
+#email
+search = driver.find_element(By.NAME, "email")
+search.send_keys(F_email_x)
+#Niepoprawne hasło
+search = driver.find_element(By.NAME, "password")
+search.send_keys(F_password)
+#Zatwierdzenie regulaminu
+search = driver.find_element(By.XPATH, "//*[text()='Zaznacz wszystkie']")
+search.click()
+time. sleep(2)
+
+#Potwierdzenie rejestracji
+search = driver.find_element(By.NAME, "firstName")
+search.send_keys(Keys.RETURN)
+time. sleep(2)
+#Sprawdzenie wystąpienia błędu
+blad = driver.find_element(By.XPATH, "//*[text()='Adres e-mail jest niepoprawny. Adres musi mieć jeden znak @.']")
+time. sleep(2)
+#Potwierdzenie wystąpienia błędu
+assert blad.text == "Adres e-mail jest niepoprawny. Adres musi mieć jeden znak @."
+time. sleep(5)
+#Zamknięcie strony
+driver.close()
+
