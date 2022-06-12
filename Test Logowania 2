@@ -1,0 +1,55 @@
+##Test logowania 2
+##Błędne hasło
+
+#Dane konta
+#Maurycy
+#Żymełka
+#pgarrett@yahoo.com
+#X%Y7OGBsG#
+
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
+from faker import Faker
+import random
+import time
+fake = Faker(['en_US', 'pl_PL'])
+#Ustawienia webdrivera
+s=Service("C:\Program Files (x86)\chromedriver.exe")
+driver=webdriver.Chrome(service=s)
+
+#Dane
+email = "pgarrett@yahoo.com"
+password = "X%Y7OGBsG#"
+
+#Fałszywe błędne dane
+password_x = "xxx"
+
+#Włączenie strony logowania do sklepu x-kom
+driver.get("https://www.x-kom.pl/logowanie")
+time.sleep(2)
+
+#Wprowadzam dane
+#login
+search = driver.find_element(By.NAME, "login")
+search.send_keys(email)
+
+#Niepoprawne hasło
+search = driver.find_element(By.NAME, "password")
+search.send_keys(password_x)
+
+
+#Potwierdzenie rejestracji
+search = driver.find_element(By.NAME, "login")
+search.send_keys(Keys.RETURN)
+time. sleep(2)
+
+#Sprawdzenie wystąpienia błędu
+blad = driver.find_element(By.XPATH, "//*[text()='Sprawdź, czy adres e-mail i hasło są poprawne']")
+time. sleep(2)
+#Potwierdzenie wystąpienia błędu
+assert blad.text == "Sprawdź, czy adres e-mail i hasło są poprawne"
+time. sleep(5)
+#Zamknięcie strony
+driver.close()
